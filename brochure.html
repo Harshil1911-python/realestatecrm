@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Property Brochure – SERENIA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html,body{min-height:100vh;font-family:'Nunito',sans-serif;background:#0a0a1a;color:#e2e8f0}
+    .header{background:#1400cc;display:flex;align-items:center;gap:14px;padding:13px 24px;box-shadow:0 4px 20px rgba(20,0,204,.4)}
+    .back-btn{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;letter-spacing:.07em;text-transform:uppercase;padding:7px 16px;border-radius:9px;cursor:pointer;transition:background .2s}
+    .back-btn:hover{background:rgba(255,255,255,.25)}
+    .header-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#fff;letter-spacing:.07em;flex:1}
+
+    .main-wrap{max-width:900px;margin:0 auto;padding:24px 20px 80px;display:flex;flex-direction:column;gap:20px}
+
+    /* Property selector */
+    .selector-card{background:#1e1e3a;border-radius:16px;padding:20px 24px;border:1px solid rgba(255,255,255,.07)}
+    .selector-card h2{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.07em;color:#818cf8;margin-bottom:14px}
+    .prop-select{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;color:#fff;font-family:'Nunito',sans-serif;font-size:.92rem;font-weight:700;outline:none;appearance:none;transition:border-color .2s}
+    .prop-select:focus{border-color:#818cf8}
+    .prop-select option{background:#1e1e3a;color:#fff}
+
+    /* Options */
+    .options-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .opt-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:9px;padding:8px 14px;cursor:pointer;transition:all .2s}
+    .opt-chip:hover{border-color:rgba(129,140,248,.3)}
+    .opt-chip.checked{background:rgba(20,0,204,.2);border-color:#1400cc}
+    .opt-chip input{accent-color:#818cf8;width:15px;height:15px;cursor:pointer}
+    .opt-chip span{font-size:.8rem;font-weight:800;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em}
+    .opt-chip.checked span{color:#fff}
+
+    .gen-btn{background:#1400cc;color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:12px;padding:14px 36px;cursor:pointer;box-shadow:0 0 24px rgba(20,0,204,.5);transition:all .2s;margin-top:16px}
+    .gen-btn:hover{background:#2c14ff;transform:translateY(-2px)}
+    .gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+    /* PREVIEW */
+    .preview-outer{background:#1e1e3a;border-radius:16px;padding:20px 24px;border:1px solid rgba(255,255,255,.07)}
+    .preview-outer h2{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.07em;color:#818cf8;margin-bottom:14px}
+    #brochureFrame{width:100%;height:600px;border:none;border-radius:10px;background:#fff}
+
+    .dl-btn{background:#16a34a;color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.07em;text-transform:uppercase;border:none;border-radius:10px;padding:12px 28px;cursor:pointer;transition:all .2s;display:none}
+    .dl-btn:hover{background:#15803d}
+
+    #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#0f0f23;color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;padding:14px 28px;border-radius:60px;box-shadow:0 8px 28px rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s;opacity:0;z-index:999;white-space:nowrap;border:1px solid rgba(255,255,255,.1)}
+    #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <button class="back-btn" onclick="history.back()">← BACK</button>
+  <div class="header-title">📄 PROPERTY BROCHURE</div>
+</div>
+
+<div class="main-wrap">
+
+  <div class="selector-card">
+    <h2>Select Property</h2>
+    <select class="prop-select" id="propSelect" onchange="onPropChange()">
+      <option value="">— Choose a property —</option>
+    </select>
+
+    <div class="options-row" id="optionsRow" style="display:none">
+      <label class="opt-chip checked" id="optPhotos">
+        <input type="checkbox" checked onchange="this.parentElement.classList.toggle('checked',this.checked)"/> <span>Photos</span>
+      </label>
+      <label class="opt-chip checked" id="optAmenities">
+        <input type="checkbox" checked onchange="this.parentElement.classList.toggle('checked',this.checked)"/> <span>Amenities</span>
+      </label>
+      <label class="opt-chip checked" id="optContact">
+        <input type="checkbox" checked onchange="this.parentElement.classList.toggle('checked',this.checked)"/> <span>Contact Info</span>
+      </label>
+      <label class="opt-chip" id="optWatermark">
+        <input type="checkbox" onchange="this.parentElement.classList.toggle('checked',this.checked)"/> <span>SERENIA Watermark</span>
+      </label>
+    </div>
+    <button class="gen-btn" id="genBtn" onclick="generateBrochure()" style="display:none">📄 GENERATE BROCHURE</button>
+  </div>
+
+  <div class="preview-outer">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <h2 style="margin-bottom:0">Preview</h2>
+      <button class="dl-btn" id="dlBtn" onclick="downloadBrochure()">⬇️ DOWNLOAD PDF</button>
+    </div>
+    <iframe id="brochureFrame" src="about:blank"></iframe>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  let _props = [], _selProp = null;
+
+  async function load() {
+    const res = await fetch('/get_properties');
+    _props = await res.json();
+    const sel = document.getElementById('propSelect');
+    sel.innerHTML = '<option value="">— Choose a property —</option>' +
+      _props.map(p => `<option value="${p.id}">${esc(p.title||p.id)} · ${esc(p.city||'')} · ${p.region||'UAE'}</option>`).join('');
+
+    // Pre-select if URL has ?id=
+    const urlId = new URLSearchParams(window.location.search).get('id');
+    if (urlId) { sel.value = urlId; onPropChange(); }
+  }
+
+  function onPropChange() {
+    const id = document.getElementById('propSelect').value;
+    _selProp = _props.find(p=>p.id===id) || null;
+    document.getElementById('optionsRow').style.display = _selProp ? 'flex' : 'none';
+    document.getElementById('genBtn').style.display     = _selProp ? 'inline-block' : 'none';
+    document.getElementById('dlBtn').style.display      = 'none';
+    if (!_selProp) document.getElementById('brochureFrame').src = 'about:blank';
+  }
+
+  function generateBrochure() {
+    if (!_selProp) return;
+    const p = _selProp;
+    const showPhotos    = document.querySelector('#optPhotos input').checked;
+    const showAmenities = document.querySelector('#optAmenities input').checked;
+    const showContact   = document.querySelector('#optContact input').checked;
+    const showWatermark = document.querySelector('#optWatermark input').checked;
+
+    const cur = p.currency==='INR' ? '₹' : 'AED';
+    const salePrice = p.sale_price_aed || p.sale_price_inr;
+    const rentPrice = p.monthly_rent_aed || p.monthly_rent_inr;
+    const fmt = n => n ? Number(n).toLocaleString() : '';
+
+    const photos = p.photos || [];
+    const photosHTML = showPhotos && photos.length
+      ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px">
+          ${photos.slice(0,6).map((ph,i) =>
+            `<img src="/photos/${ph}" style="width:100%;height:${i===0?'240px':'110px'};object-fit:cover;border-radius:8px;grid-column:${i===0?'1/4':'auto'};grid-row:${i===0?'1':'2'}" onerror="this.style.display='none'"/>`
+          ).join('')}
+        </div>` : '';
+
+    const amenitiesHTML = showAmenities && p.amenities?.length
+      ? `<div style="margin-bottom:20px">
+          <h3 style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:10px">Amenities</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${p.amenities.map(a=>`<span style="background:#f4f4f8;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:700;color:#444">${a}</span>`).join('')}
+          </div>
+        </div>` : '';
+
+    const contactHTML = showContact && p.seller_name
+      ? `<div style="background:#f8f4ff;border-radius:8px;padding:14px 18px;margin-top:20px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px">Contact</div>
+          <div style="font-size:13px;font-weight:800;color:#1a1a2e">${p.seller_name}</div>
+          ${p.seller_phone?`<div style="font-size:12px;color:#666;margin-top:2px">📞 ${p.seller_phone}</div>`:''}
+        </div>` : '';
+
+    const watermarkHTML = showWatermark
+      ? `<div style="position:fixed;bottom:20px;right:20px;opacity:.12;font-family:sans-serif;font-size:28px;font-weight:900;color:#1400cc;letter-spacing:.1em;pointer-events:none;transform:rotate(-15deg)">SERENIA</div>` : '';
+
+    const html = `<!DOCTYPE html><html><head>
+      <meta charset="UTF-8"/>
+      <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+      <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Nunito',sans-serif;background:#fff;color:#1a1a2e;padding:32px;max-width:800px;margin:0 auto}
+        @media print{body{padding:0}.no-print{display:none!important}}
+      </style>
+    </head><body>
+
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #1400cc">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.15em;color:#1400cc;text-transform:uppercase;margin-bottom:4px">SERENIA REAL ESTATE</div>
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;color:#1a1a2e;line-height:1.1">${esc(p.title||'Untitled Property')}</h1>
+        <div style="font-size:13px;font-weight:700;color:#888;margin-top:4px">${esc([p.address,p.city,p.state].filter(Boolean).join(', ')||'—')}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="background:#1400cc;color:#fff;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">#${esc(p.id)}</div>
+        ${p.category?`<div style="background:#f4f4f8;color:#555;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em">${esc(p.category)}</div>`:''}
+      </div>
+    </div>
+
+    ${photosHTML}
+
+    <!-- Price + Key details -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+      ${salePrice?`<div style="background:#1400cc;color:#fff;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;opacity:.7;margin-bottom:4px">Sale Price</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.03em">${cur} ${fmt(salePrice)}</div>
+      </div>`:''}
+      ${rentPrice?`<div style="background:#0a7c3e;color:#fff;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;opacity:.7;margin-bottom:4px">Monthly Rent</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.03em">${cur} ${fmt(rentPrice)}</div>
+      </div>`:''}
+      ${p.area_sqft?`<div style="background:#f4f4f8;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:4px">Area</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#1a1a2e">${fmt(p.area_sqft)} sqft</div>
+      </div>`:''}
+    </div>
+
+    <!-- Specs -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+      ${[
+        ['🛏', 'Bedrooms',  p.bedrooms],
+        ['🚿', 'Bathrooms', p.bathrooms],
+        ['🏢', 'Type',      p.property_type],
+        ['📍', 'Region',    p.region||'UAE'],
+      ].filter(r=>r[2]).map(([icon,label,val])=>`
+        <div style="border:1.5px solid #e8e0f0;border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">${icon}</div>
+          <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">${label}</div>
+          <div style="font-size:14px;font-weight:800;color:#1a1a2e">${val}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Description -->
+    ${p.description?`<div style="margin-bottom:20px">
+      <h3 style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px">Description</h3>
+      <p style="font-size:13px;font-weight:700;color:#444;line-height:1.7">${esc(p.description)}</p>
+    </div>`:''}
+
+    ${amenitiesHTML}
+    ${contactHTML}
+
+    <!-- Footer -->
+    <div style="margin-top:28px;padding-top:12px;border-top:1px solid #e8e0f0;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:10px;font-weight:700;color:#aaa">Generated by SERENIA Real Estate Management · ${new Date().toLocaleDateString()}</div>
+      ${p.lat&&p.lng?`<div style="font-size:10px;font-weight:700;color:#aaa">📍 ${parseFloat(p.lat).toFixed(5)}, ${parseFloat(p.lng).toFixed(5)}</div>`:''}
+    </div>
+
+    ${watermarkHTML}
+    </body></html>`;
+
+    const frame = document.getElementById('brochureFrame');
+    frame.srcdoc = html;
+    document.getElementById('dlBtn').style.display = 'inline-block';
+    showToast('✅ Brochure generated!');
+  }
+
+  function downloadBrochure() {
+    const frame = document.getElementById('brochureFrame');
+    const win   = frame.contentWindow;
+    if (!win) { showToast('❌ Nothing to print'); return; }
+    win.print();
+  }
+
+  function showToast(msg,dur=3500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
+  function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''}
+
+  load();
+</script>
+</body>
+</html>
